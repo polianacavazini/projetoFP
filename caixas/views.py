@@ -73,7 +73,9 @@ def caixaExcluir(request, pk=0):
     except:
         return HttpResponseRedirect('/caixas/')
 
-
+def caixaFluxo(request):
+    #contas = Conta.objects.all()[0:10]
+    return render(request, 'caixas/caixaFluxo.html')
 
 
     
