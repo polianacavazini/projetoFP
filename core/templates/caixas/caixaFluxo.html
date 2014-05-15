@@ -10,6 +10,12 @@
     });
   });
 </script>
+<style type="text/css">
+    @media print
+    {
+        nav, footer, form, .btn{display: none;} 
+    }   
+</style>
 
 <form class="form-horizontal" action="/caixas/fluxo/pesquisar/" method="POST" role="form">{% csrf_token %}
 
@@ -71,13 +77,18 @@
             <td>{{ conta.tipo }}</td>
           </tr>
         {% endfor %}  
+        <tr>
+            <td colspan="3"></td>
+            <td><b>Total a Pagar: </b>{{ totalPagar}}</td>
+            <td><b>Total a Receber: </b>{{ totalReceber}}</td>
+        </tr>
         </tbody>
       </table>
     </div>
     <br>
 
     <div align="center">
-        <button type="submit" class="btn btn-primary">Imprimir <span class="glyphicon glyphicon-print"></span></button>
+        <button onclick="window.print();" class="btn btn-primary">Imprimir <span class="glyphicon glyphicon-print"></span></button>
     </div>
 
 
