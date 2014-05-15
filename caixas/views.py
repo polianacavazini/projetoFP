@@ -84,12 +84,24 @@ def pesquisaFluxo(request):
     
     pessoas = Pessoa.objects.all()
 
-    if int(pessoa_id) == 0:
-        contas = Conta.objects.all()
-    else:
-        contas = Conta.objects.filter(pessoa_id = pessoa_id)
+    totalReceber = 0
+    totalPagar = 0
+
+    try:
+        if int(pessoa_id) == 0:
+            contas = Conta.objects.all()
+        else:
+            contas = Conta.objects.filter(pessoa_id = pessoa_id)
+
+        for conta in contas:
+            if conta.tipo == 'E':
+                totalReceber = totalReceber + conta.valor
+            else:
+                totalPagar = totalPagar + conta.valor
+    except:
+        contas = []
     
-    return render(request, 'caixas/caixaFluxo.html',{'pessoas':pessoas, 'contas':contas})
+    return render(request, 'caixas/caixaFluxo.html',{'pessoas':pessoas, 'contas':contas, 'totalPagar':totalPagar, 'totalReceber':totalReceber})
 
     
 
