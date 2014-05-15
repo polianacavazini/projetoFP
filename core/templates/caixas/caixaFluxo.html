@@ -11,19 +11,15 @@
   });
 </script>
 
-<form class="form-horizontal" action="/caixas/listar/" method="POST" role="form">{% csrf_token %}
+<form class="form-horizontal" action="/caixas/fluxo/pesquisar/" method="POST" role="form">{% csrf_token %}
 
     <div class="form-group">
         <label for="pessoa_id" class="col-sm-2 control-label">Pessoa</label>
         <div class="col-sm-10">
             <select class="form-control" name="pessoa_id" id="pessoa_id" >
-            <option value="0">SELECIONE UMA PESSOA</option>
+            <option value="0">TODOS</option>
             {% for pessoa in pessoas %}
-                {% if pessoa.id == conta.pessoa.id %}
-                <option value="{{ pessoa.id }}" selected>{{ pessoa.nome }} - {{ pessoa.email }}</option>
-                {% else %}
                 <option value="{{ pessoa.id }}">{{ pessoa.nome }} - {{ pessoa.email }}</option>
-                {% endif %}
             {% endfor %} 
             </select>
         </div>
@@ -40,7 +36,7 @@
     </div>
 
     <div class="col-sm-5">
-        <div id="datetimepicker" class="input-append date" class="form-control">
+        <div id="datetimepicker2" class="input-append date" class="form-control">
             <input type="text" name="data2" value placeholder="Data Final" value="{{ conta.data }}" >
             <span class="add-on">
                 <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
@@ -50,11 +46,9 @@
 
     <div align="center">
         <button type="submit" class="btn btn-primary">Pesquisar <span class="glyphicon glyphicon-search"></span></button>
-        {% if pessoa.pk > 0 %}
-        <a class="btn btn-danger" href="/pessoas/excluir/{{ pessoa.pk }}/">Excluir</a>
-        {% endif %}
     </div>
-    <br><br>
+</form>
+<br><br>
 
     <div class="table-responsive">
       <table class="table table-striped">
@@ -70,7 +64,7 @@
         <tbody>
         {% for conta in contas %}
           <tr>
-            <td><a href="/caixas/editar/{{ conta.pk }}">{{ conta.pessoa.nome }}</a></td>
+            <td>{{ conta.pessoa.nome }}</td>
             <td>{{ conta.valor }}</td>
             <td>{{ conta.descricao }}</td>
             <td>{{ conta.data|date:"d/m/Y" }}</td>
@@ -86,7 +80,5 @@
         <button type="submit" class="btn btn-primary">Imprimir <span class="glyphicon glyphicon-print"></span></button>
     </div>
 
-
-</form>
 
 {% endblock conteudo %}
