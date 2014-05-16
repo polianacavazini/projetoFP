@@ -6,7 +6,7 @@ https://www.facebook.com/groups/pythonmania/
 """
 
 from django.shortcuts import render, HttpResponseRedirect
-from datetime import datetime
+from datetime import datetime, date
 from django.db.models import Q #Queries complexas
 from caixas.models import Conta
 from pessoas.models import Pessoa
@@ -79,9 +79,12 @@ def caixaFluxo(request):
 
 def pesquisaFluxo(request):
     pessoa_id = request.POST.get('pessoa_id')
-    #dataInicial = datetime.strptime(request.POST.get('data', ''), '%d/%m/%Y %H:%M:%S')
-    #dataFinal = datetime.strptime(request.POST.get('data2', ''), '%d/%m/%Y %H:%M:%S')
-    
+    data = request.POST.get('data', '')
+    data2 = request.POST.get('data2', '')
+
+    datasplit1 = data[0:10].split('/') 
+    datasplit2 = data2[0:10].split('/')
+
     pessoas = Pessoa.objects.all()
 
     totalReceber = 0
@@ -89,22 +92,20 @@ def pesquisaFluxo(request):
 
     try:
         if int(pessoa_id) == 0:
-            contas = Conta.objects.all()
+            contas = Conta.objects.filter(data__gte=date( int(datasplit1[2]), int(datasplit1[1]), int(datasplit1[0]) ) 
+                                        , data__lte=date( int(datasplit2[2]), int(datasplit2[1]), int(datasplit2[0]) ))
         else:
-            contas = Conta.objects.filter(pessoa_id = pessoa_id)
-
+            contas = Conta.objects.filter(pessoa_id = pessoa_id, data__gte=date( int(datasplit1[2]), int(datasplit1[1]), int(datasplit1[0]) ) 
+                                        , data__lte=date( int(datasplit2[2]), int(datasplit2[1]), int(datasplit2[0]) ))
         for conta in contas:
             if conta.tipo == 'E':
                 totalReceber = totalReceber + conta.valor
             else:
                 totalPagar = totalPagar + conta.valor
     except:
-        contas = []
+       contas = []
     
     return render(request, 'caixas/caixaFluxo.html',{'pessoas':pessoas, 'contas':contas, 'totalPagar':totalPagar, 'totalReceber':totalReceber})
-
-    
-
 
 
 
